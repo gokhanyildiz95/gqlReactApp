@@ -15,11 +15,13 @@ const typeDefs=gql`
 
     type Query{
         makalelerGetir:[Makale]!
+        makaleGetir(id:ID!):Makale!
     }
 
     type Mutation{
         makaleOlustur(baslik:String!,icerik:String!):Makale!
     }
+
 `;
 
 const resolvers={
@@ -28,6 +30,14 @@ const resolvers={
         async makalelerGetir(){
             const makaleler=await MakaleModel.find();
             return makaleler;
+        },
+        async makaleGetir(parent,args){
+            try{
+                const {id}=args;
+                return await MakaleModel.findById(id);
+            }catch{
+                throw new error
+            }
         }
     },
     Mutation:{
